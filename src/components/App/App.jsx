@@ -18,15 +18,14 @@ class App extends Component {
   };
 
   onSearchPictures = keyword => {
-    this.setState({ isLoader: true });
+    this.setState({ isLoader: true, isLoadMore: false });
     requestAxios(keyword, this.state.page, this.state.perPage)
       .then(data => {if (data.hits.length === 0) {
       Notify.info(`Sorry, there are no images matching your search query. Please try again.`);
       this.setState({ isLoadMore: false });
-    }this.setState({ items: data.hits, total: data.totalHits })})
+    }this.setState({ items: data.hits, total: data.totalHits, page: 2, isLoadMore: true, keyword })})
       .catch(error => console.log(error))
       .finally(() => this.setState({ isLoader: false }));
-    this.setState({ page: 2, isLoadMore: true, keyword });
     
   };
 
