@@ -3,7 +3,6 @@ import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 import Loader from 'components/Loader/Loader';
-// import Modal from 'components/Modal/Modal'
 import requestAxios from '../../API';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
@@ -21,14 +20,14 @@ class App extends Component {
   onSearchPictures = keyword => {
     this.setState({ isLoader: true });
     requestAxios(keyword, this.state.page, this.state.perPage)
-      .then(data => this.setState({ items: data.hits, total: data.totalHits }))
+      .then(data => {if (data.hits.length === 0) {
+      Notify.info(`Sorry, there are no images matching your search query. Please try again.`);
+      this.setState({ isLoadMore: false });
+    }this.setState({ items: data.hits, total: data.totalHits })})
       .catch(error => console.log(error))
       .finally(() => this.setState({ isLoader: false }));
     this.setState({ page: 2, isLoadMore: true, keyword });
-    if (this.state.items.length === 0) {
-      Notify.info(`Sorry, there are no images matching your search query. Please try again.`);
-      this.setState({ isLoadMore: false });
-    }
+    
   };
 
   onSerchLoadMore = keyword => {
@@ -65,8 +64,6 @@ class App extends Component {
           />
         )}
         {this.state.isLoader && <Loader />}
-
-        {/* <Modal/> */}
       </>
     );
   }
