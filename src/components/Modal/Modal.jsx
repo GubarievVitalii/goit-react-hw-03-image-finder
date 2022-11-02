@@ -21,7 +21,7 @@ class Modal extends Component {
         return (
             <div className={s.overlay} onClick={this.onModalClose}>
                 <div className={s.modal}>
-                    < img className={s.modalImg} src={largeImageURL} alt={alt} />
+                    < img src={largeImageURL} alt={alt} />
                 </div>
             </div>
         )
